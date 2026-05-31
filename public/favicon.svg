@@ -1,9 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
   <defs>
-    <linearGradient id="bolt-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+    <linearGradient id="rune-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
       <stop stop-color="#eab308"/>
       <stop offset="1" stop-color="#f59e0b"/>
     </linearGradient>
   </defs>
-  <path d="M19 2L7 18H14L13 30L25 14H18L19 2Z" fill="url(#bolt-grad)"/>
+  <!-- Runic Ansuz (Divine Power) with Serif Styling -->
+  <path d="M10 4V28M10 4L22 13M10 13L22 22" stroke="url(#rune-grad)" stroke-width="4" stroke-linecap="butt" stroke-linejoin="miter"/>
+  <!-- Decorative Serifs -->
+  <path d="M7 4H13M7 28H13M21.5 12L23.5 13.5M21.5 21L23.5 22.5" stroke="url(#rune-grad)" stroke-width="2.5" stroke-linecap="butt"/>
 </svg>
