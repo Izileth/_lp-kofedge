@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -9,21 +10,26 @@ function App() {
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
+      <section id="center" className="flex flex-col items-center justify-center py-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="hero relative mb-8"
+        >
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
           <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+        </motion.div>
+        <div className="text-center">
+          <h1 className="text-5xl font-bold mb-4">Get started</h1>
+          <p className="text-lg opacity-80">
+            Edit <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">src/App.tsx</code> and save to test <code>HMR</code>
           </p>
         </div>
         <button
           type="button"
-          className="counter"
+          className="counter mt-8 bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition-colors"
           onClick={() => setCount((count) => count + 1)}
         >
           Count is {count}
