@@ -12,10 +12,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Close menu on route change
+  // Close menu on route change if the menu is open
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location]);
+    if (!menuOpen) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setMenuOpen(false);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [location, menuOpen]);
 
   const navItems = [
     { label: "Panteão", path: "/" },
@@ -90,9 +98,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </p>
 
         <div className="flex gap-4 items-center">
-            <span className="text-[10px] text-white/20 tracking-widest uppercase hidden sm:block">Assembleia de Deuses</span>
-            <div className="h-px w-8 bg-white/10" />
-            <TempleIcon size={16} color="rgba(255,255,255,0.2)" />
+          <span className="text-[10px] text-white/20 tracking-widest uppercase hidden sm:block">Assembleia de Deuses</span>
+          <div className="h-px w-8 bg-white/10" />
+          <TempleIcon size={16} color="rgba(255,255,255,0.2)" />
         </div>
       </footer>
     </div>
