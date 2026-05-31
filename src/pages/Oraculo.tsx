@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VaseIcon } from "../components/Icons";
+import backdrop from "../assets/back/backdrop.png";
 
 const profecias = [
   "O ouro que buscas é apenas o reflexo do teu próprio ego.",
@@ -25,55 +26,73 @@ export default function Oraculo() {
   };
 
   return (
-    <main className="absolute inset-0 flex flex-col items-center justify-center p-8 z-10" style={{ top: "clamp(52px, 8vh, 80px)", bottom: "clamp(44px, 7vh, 72px)" }}>
-      <div className="relative flex flex-col items-center max-w-2xl text-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          className="absolute -z-10 opacity-[0.05] text-amber-500"
-        >
-          <VaseIcon size={400} />
-        </motion.div>
+    <div className="relative w-full h-full">
+      {/* ─── ATMOSPHERIC OVERLAY ─────────────────────────── */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.2 }}
+        transition={{ duration: 2 }}
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+      >
+        <motion.img 
+          src={backdrop} 
+          alt="" 
+          className="w-full h-full object-cover hue-rotate-15 contrast-125"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.25, 0.15] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </motion.div>
 
-        <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 italic tracking-tighter">O Oráculo de Delfos</h1>
-        <p className="text-white/40 mb-12 italic">Aproxime-se, mortal, e descubra o que as Parcas teceram para o teu destino.</p>
+      <main className="absolute inset-0 flex flex-col items-center justify-center p-8 z-10" style={{ top: "clamp(52px, 8vh, 80px)", bottom: "clamp(44px, 7vh, 72px)" }}>
+        <div className="relative flex flex-col items-center max-w-2xl text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            className="absolute -z-10 opacity-[0.05] text-amber-500"
+          >
+            <VaseIcon size={400} />
+          </motion.div>
 
-        <AnimatePresence mode="wait">
-          {profecia ? (
-            <motion.div
-              key="profecia"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="bg-amber-500/10 border border-amber-500/20 p-8 mb-12 rounded-sm backdrop-blur-md"
-            >
-              <p className="text-amber-500 text-2xl italic font-bold">"{profecia}"</p>
-            </motion.div>
-          ) : loading ? (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="mb-12"
-            >
-              <div className="w-12 h-12 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
-            </motion.div>
-          ) : (
-            <div className="h-24 mb-12" />
-          )}
-        </AnimatePresence>
+          <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 italic tracking-tighter">O Oráculo de Delfos</h1>
+          <p className="text-white/40 mb-12 italic">Aproxime-se, mortal, e descubra o que as Parcas teceram para o teu destino.</p>
 
-        <motion.button
-          onClick={consultar}
-          disabled={loading}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-amber-600 text-black px-12 py-4 rounded-sm font-bold tracking-[0.3em] uppercase hover:bg-amber-500 transition-colors disabled:opacity-50 font-sans"
-        >
-          Pedir Profecia
-        </motion.button>
-      </div>
-    </main>
+          <AnimatePresence mode="wait">
+            {profecia ? (
+              <motion.div
+                key="profecia"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="bg-amber-500/10 border border-amber-500/20 p-8 mb-12 rounded-sm backdrop-blur-md"
+              >
+                <p className="text-amber-500 text-2xl italic font-bold">"{profecia}"</p>
+              </motion.div>
+            ) : loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="mb-12"
+              >
+                <div className="w-12 h-12 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+              </motion.div>
+            ) : (
+              <div className="h-24 mb-12" />
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            onClick={consultar}
+            disabled={loading}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-amber-600 text-black px-12 py-4 rounded-sm font-bold tracking-[0.3em] uppercase hover:bg-amber-500 transition-colors disabled:opacity-50 font-sans"
+          >
+            Pedir Profecia
+          </motion.button>
+        </div>
+      </main>
+    </div>
   );
 }
