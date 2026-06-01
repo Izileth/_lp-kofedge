@@ -12,11 +12,12 @@ const linhagens = [
 
 export default function Linhagens() {
   return (
-    <div className="relative w-full h-full">
-      {/* ─── ATMOSPHERIC OVERLAY ─────────────────────────── */}
+    <div className="relative w-full h-full overflow-hidden bg-[#0d0d0d] flex flex-col pt-[clamp(52px,8vh,80px)] pb-[clamp(44px,7vh,72px)]">
+      
+      {/* ─── DYNAMIC ATMOSPHERIC BACKDROP ──────────────────────── */}
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.12 }}
+        animate={{ opacity: 0.1 }}
         transition={{ duration: 2 }}
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
@@ -24,44 +25,96 @@ export default function Linhagens() {
           src={backdrop} 
           alt="" 
           className="w-full h-full object-cover grayscale brightness-50"
-          animate={{ x: [-20, 20, -20], y: [-10, 10, -10] }}
+          animate={{ x: [-10, 10, -10], scale: [1.1, 1.05, 1.1] }}
           transition={{ duration: 40, repeat: Infinity, ease: "easeInOut" }}
         />
       </motion.div>
 
-      <main className="absolute inset-0 flex flex-col items-center justify-center p-8 z-10 overflow-y-auto" style={{ top: "clamp(52px, 8vh, 80px)", bottom: "clamp(44px, 7vh, 72px)" }}>
-        <motion.h1 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-white text-4xl md:text-6xl font-bold mb-16 italic tracking-tighter"
-        >
-          Árvore do Sangue Real
-        </motion.h1>
+      {/* ─── AMBIENT BACKGROUND GLOW ────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2 }}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background: `radial-gradient(ellipse 60% 60% at 50% 50%, rgba(239, 68, 68, 0.08) 0%, transparent 80%)`,
+        }}
+      />
 
-        <div className="relative flex flex-col items-center gap-12 w-full max-w-4xl">
-          <div className="absolute top-0 bottom-0 w-px bg-white/10 left-1/2 -translate-x-1/2 hidden md:block" />
-          
-          {linhagens.map((lin, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className={`flex items-center gap-8 w-full ${i % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-            >
-              <div className={`flex-1 ${i % 2 === 0 ? "text-right" : "text-left"}`}>
-                <span className="text-white/30 text-xs font-sans uppercase tracking-[0.3em]">{lin.pai}</span>
-                <h3 className="text-white text-xl md:text-2xl font-bold italic">{lin.filho}</h3>
-                <p className="text-amber-500/80 text-sm font-light uppercase tracking-widest">{lin.titulo}</p>
-              </div>
-              <div className="z-10 text-white/40 bg-[#0d0d0d] p-2">
-                <SkullIcon size={20} />
-              </div>
-              <div className="flex-1" />
-            </motion.div>
-          ))}
+      {/* ─── GIANT WATERMARK ────────────────────────────────────── */}
+      <motion.span
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 0.025, scale: 1 }}
+        transition={{ duration: 1.5 }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none text-white font-black leading-none uppercase font-sans text-[22vw] z-0"
+        style={{ letterSpacing: "-10px" }}
+      >
+        SANGUIS
+      </motion.span>
+
+      {/* ─── MAIN CONTENT ───────────────────────────────────────── */}
+      <div className="relative z-10 flex flex-1 overflow-hidden">
+        
+        {/* LEFT SIDEBAR — decorative */}
+        <aside className="hidden md:flex flex-col items-center justify-center w-16 flex-shrink-0 py-8 border-r border-white/5">
+          <span
+            className="text-[10px] tracking-[0.4em] text-white/20 font-light font-sans uppercase whitespace-nowrap"
+            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+          >
+            Lineae Sanguinis
+          </span>
+        </aside>
+
+        <div className="flex-1 flex flex-col items-center py-16 px-8 overflow-y-auto custom-scrollbar">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-20"
+          >
+            <span className="text-[10px] tracking-[0.4em] uppercase text-red-500/50 font-sans font-bold mb-4 block">
+              Herança Imortal
+            </span>
+            <h1 className="text-white text-5xl md:text-7xl font-bold italic tracking-tighter font-serif">
+              Árvore do Sangue
+            </h1>
+          </motion.div>
+
+          <div className="relative flex flex-col items-center gap-16 w-full max-w-4xl pb-20">
+            {/* Timeline Line */}
+            <div className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-white/5 via-white/10 to-white/5 left-1/2 -translate-x-1/2 hidden md:block" />
+            
+            {linhagens.map((lin, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className={`flex items-center gap-12 w-full ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-col text-center md:text-left`}
+              >
+                <div className={`flex-1 flex flex-col ${i % 2 === 0 ? "md:items-end md:text-right" : "md:items-start md:text-left"}`}>
+                  <span className="text-white/20 text-[9px] font-sans uppercase tracking-[0.4em] mb-2">{lin.pai}</span>
+                  <h3 className="text-white text-2xl md:text-4xl font-bold italic font-serif leading-none mb-3 group-hover:text-red-500 transition-colors">
+                    {lin.filho}
+                  </h3>
+                  <p className="text-amber-500/60 text-[10px] font-bold uppercase tracking-[0.2em] font-sans">
+                    {lin.titulo}
+                  </p>
+                </div>
+
+                <div className="relative z-10 shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-[#0d0d0d] border border-white/10 flex items-center justify-center text-white/30 hover:text-red-500/70 transition-colors duration-500 hover:border-red-500/30 hover:scale-110">
+                    <SkullIcon size={18} />
+                  </div>
+                </div>
+
+                <div className="flex-1 hidden md:block" />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
