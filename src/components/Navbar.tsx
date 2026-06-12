@@ -3,10 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 
 /* ─── types ─────────────────────────────────────────────────────── */
+interface NavSubItem {
+    label: string;
+    path: string;
+}
+
 interface NavItem {
     label: string;
     sup: string;
-    sub: string[];
+    sub: NavSubItem[];
     path: string;
 }
 
@@ -15,25 +20,45 @@ const NAV_ITEMS: NavItem[] = [
     {
         label: "INDEX",
         sup: "01",
-        sub: ["Overview", "Specifications", "Performance Data", "Certifications"],
+        sub: [
+            { label: "Overview", path: "/overview" },
+            { label: "Specifications", path: "/specifications" },
+            { label: "Performance Data", path: "/performance" },
+            { label: "Certifications", path: "/certifications" }
+        ],
         path: "/",
     },
     {
         label: "CATALOG",
         sup: "02",
-        sub: ["All Models", "Tactical Series", "Night Series", "Accessories"],
+        sub: [
+            { label: "All Models", path: "/catalog/all" },
+            { label: "Tactical Series", path: "/catalog/tactical" },
+            { label: "Night Series", path: "/catalog/night" },
+            { label: "Accessories", path: "/catalog/accessories" }
+        ],
         path: "/catalog",
     },
     {
         label: "COMPANY",
         sup: "03",
-        sub: ["About XVS", "Research Lab", "Partners", "Press"],
+        sub: [
+            { label: "About XVS", path: "/company/about" },
+            { label: "Research Lab", path: "/company/lab" },
+            { label: "Partners", path: "/company/partners" },
+            { label: "Press", path: "/company/press" }
+        ],
         path: "/company",
     },
     {
         label: "CONTACTS",
         sup: "04",
-        sub: ["Get in Touch", "Distributors", "Support", "HQ Location"],
+        sub: [
+            { label: "Get in Touch", path: "/contacts/touch" },
+            { label: "Distributors", path: "/contacts/distributors" },
+            { label: "Support", path: "/contacts/support" },
+            { label: "HQ Location", path: "/contacts/hq" }
+        ],
         path: "/contacts",
     },
 ];
@@ -70,7 +95,7 @@ function DesktopDropdown({ item, isOpen, onEnter, onLeave }: { item: NavItem; is
                 role="menu"
             >
                 {item.sub.map(s => (
-                    <Link key={s} to={item.path} className="text-[10px] font-bold tracking-[0.18em] uppercase no-underline text-black px-4 py-3 border-b border-gray-100 last:border-0 hover:bg-black hover:text-white transition-colors" role="menuitem">{s}</Link>
+                    <Link key={s.path} to={s.path} className="text-[10px] font-bold tracking-[0.18em] uppercase no-underline text-black px-4 py-3 border-b border-gray-100 last:border-0 hover:bg-black hover:text-white transition-colors" role="menuitem">{s.label}</Link>
                 ))}
             </div>
         </li>
@@ -91,8 +116,12 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             gsap.to(panelRef.current, { x: "100%", duration: 0.4, ease: "power3.in" });
             gsap.to(overlayRef.current, { opacity: 0, duration: 0.3 });
             document.body.style.overflow = "";
-            setExpanded(null);
         }
+        return () => {
+            if (!open) {
+                setExpanded(null);
+            }
+        };
     }, [open]);
 
     return (
@@ -142,7 +171,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                                 style={{ maxHeight: expanded === idx ? `${item.sub.length * 52}px` : 0, opacity: expanded === idx ? 1 : 0 }}
                             >
                                 {item.sub.map(s => (
-                                    <Link key={s} to={item.path} className="block px-12 py-3 text-[10px] font-bold tracking-[0.18em] uppercase text-gray-600 border-b border-gray-100 last:border-0 hover:text-red-600 hover:bg-white transition-colors" onClick={onClose}>{s}</Link>
+                                    <Link key={s.path} to={s.path} className="block px-12 py-3 text-[10px] font-bold tracking-[0.18em] uppercase text-gray-600 border-b border-gray-100 last:border-0 hover:text-red-600 hover:bg-white transition-colors" onClick={onClose}>{s.label}</Link>
                                 ))}
                             </div>
                         </div>
@@ -175,7 +204,10 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
-        setMenuOpen(false);
+        const timer = window.setTimeout(() => {
+            setMenuOpen(false);
+        }, 0);
+        return () => window.clearTimeout(timer);
     }, [location]);
 
     return (
