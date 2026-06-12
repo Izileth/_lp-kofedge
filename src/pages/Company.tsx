@@ -59,6 +59,16 @@ export default function Company() {
                         </div>
                         
                         <div className="space-y-4">
+                            {/* Image Placeholder */}
+                            <div className="w-full h-48 md:h-64 border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center mb-6 relative overflow-hidden">
+                                <div className="absolute inset-0 opacity-[0.02] flex items-center justify-center -rotate-6">
+                                    <span className="text-8xl font-black">XVS_ARCHIVE</span>
+                                </div>
+                                <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase font-bold relative z-10">
+                                    [IMG_REF: HQ_ESTABLISHMENT_01]<br />ARCHIVAL_PHOTOGRAPHY_PENDING
+                                </p>
+                            </div>
+
                             <p className="text-gray-600 leading-loose uppercase text-[12px] font-bold tracking-wider">
                                 With over 20 years of experience in the field, we continue to push the boundaries of what's possible in tactical gear. Our engineering team specializes in neural-linked hardware and adaptive camouflage systems.
                             </p>

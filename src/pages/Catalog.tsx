@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import { gsap } from "gsap";
 
 export default function Catalog() {
@@ -32,18 +32,30 @@ export default function Catalog() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[1, 2, 3, 4, 5, 6].map(i => (
-                            <div key={i} className="catalog-item border-[1.5px] border-black bg-white p-6 aspect-video flex flex-col justify-between hover:shadow-2xl transition-shadow cursor-pointer group">
-                                <div className="flex justify-between items-start">
+                            <div key={i} className="catalog-item border-[1.5px] border-black bg-white p-6 aspect-video flex flex-col justify-between hover:shadow-2xl transition-shadow cursor-pointer group relative overflow-hidden">
+                                {/* Image Placeholder Background */}
+                                <div className="absolute inset-0 z-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
+                                    <span className="text-[40px] font-black uppercase -rotate-12 whitespace-nowrap">PREVIEW_NOT_FOUND</span>
+                                </div>
+                                
+                                <div className="relative z-10 flex justify-between items-start">
                                     <span className="text-[10px] font-bold text-gray-400">MODEL X-{i}00</span>
                                     <div className="w-1.5 h-1.5 bg-black rounded-full" />
                                 </div>
-                                <div>
+
+                                <div className="relative z-10 my-4 flex-1 flex items-center justify-center border border-dashed border-gray-200 bg-gray-50/50">
+                                     <p className="text-[8px] text-gray-400 tracking-[0.2em] uppercase text-center">
+                                        [IMG_REF: CAT_0{i}]<br />RENDER_PENDING
+                                    </p>
+                                </div>
+
+                                <div className="relative z-10">
                                     <h2 className="text-2xl font-black uppercase leading-tight group-hover:text-red-600 transition-colors">Tactical Series {i}</h2>
                                     <p className="text-[9px] text-gray-400 mt-2 tracking-widest uppercase italic">Optimized for rapid response</p>
                                 </div>
-                                <button className="self-start mt-4 text-[11px] font-black border-b-[2px] border-black hover:text-red-600 hover:border-red-600 transition-all uppercase tracking-widest">
+                                <Link to="/specifications" className="relative z-10 self-start mt-4 text-[11px] font-black border-b-[2px] border-black hover:text-red-600 hover:border-red-600 transition-all uppercase tracking-widest no-underline">
                                     VIEW SPECS
-                                </button>
+                                </Link>
                             </div>
                         ))}
                     </div>

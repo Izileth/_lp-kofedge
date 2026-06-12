@@ -52,6 +52,40 @@ export default function SubPage({ title, description = "Tactical operational dat
                 </p>
             </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                <div className="lg:col-span-2 data-block border-[1.5px] border-black bg-white p-2">
+                    {/* Tactical Image Placeholder */}
+                    <div className="w-full aspect-video bg-zinc-100 border border-gray-200 flex flex-col items-center justify-center relative overflow-hidden">
+                        <div className="absolute top-4 left-4 flex gap-2">
+                            <div className="w-1.5 h-1.5 bg-red-600" />
+                            <div className="w-1.5 h-1.5 bg-black" />
+                        </div>
+                        <div className="absolute inset-0 opacity-[0.03] flex items-center justify-center">
+                            <span className="text-[120px] font-black uppercase tracking-tighter">DATA_VISUAL</span>
+                        </div>
+                        <p className="text-[10px] text-gray-400 tracking-[0.4em] uppercase font-black text-center relative z-10">
+                            [IMAGE_REFERENCE_ID: SUB_VIS_01]<br />
+                            STATUS: WAITING_FOR_PAYLOAD<br />
+                            ENCRYPTION: AES-256
+                        </p>
+                        <div className="absolute bottom-4 right-4 text-[8px] font-mono text-gray-300">
+                            COORD: 35.6895° N, 139.6917° E
+                        </div>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="data-block border border-black/10 bg-white/50 p-4 backdrop-blur-sm">
+                            <span className="text-[8px] font-black text-red-600 block mb-1 tracking-widest uppercase">Telemetry_{i}</span>
+                            <div className="h-1 bg-gray-100 w-full mb-2">
+                                <div className="h-full bg-black" style={{ width: `${30 + i * 20}%` }} />
+                            </div>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Signal strength: stable</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[1, 2, 3, 4].map(i => (
                     <div key={i} className="data-block border border-black/10 bg-white/50 p-6 backdrop-blur-sm hover:bg-white hover:border-black transition-all group">

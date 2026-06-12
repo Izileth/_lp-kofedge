@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { TriIcon } from "../components/Navbar";
 
 /* ─── hooks ─────────────────────────────────────────────────────── */
@@ -72,9 +73,9 @@ export default function HorizonS() {
                         </span>
                     </div>
                     <div className="absolute right-0 top-[-12%] bottom-[-12%] w-[clamp(200px,44%,480px)] z-20 flex items-center justify-end pointer-events-none">
-                        <div className="w-full h-full border border-white/10 border-dashed flex items-center justify-center">
+                        <div className="w-full h-full border border-white/10 border-dashed flex items-center justify-center bg-zinc-900/50">
                             <p className="text-[9px] text-white/20 tracking-[0.18em] uppercase text-center leading-[2]">
-                                ADD<br />PRODUCT<br />IMAGE<br />HERE
+                                [IMAGE_BUFFER_01]<br />PRODUCT_HERO_RENDER<br />RESOLUTION: 2400x1600
                             </p>
                         </div>
                     </div>
@@ -96,8 +97,8 @@ export default function HorizonS() {
                             <span className="text-[9px] text-red-600 tracking-widest uppercase">Handle with protective gear at all times</span>
                         </div>
                         <div className="flex flex-wrap gap-2.5 mt-[18px]">
-                            <button className="bg-red-600 text-white border-none px-[30px] py-3 cursor-pointer font-sans text-[11px] font-black tracking-[0.22em] uppercase hover:bg-red-700 active:scale-95 transition-all">EXPLORE MODEL</button>
-                            <button className="bg-transparent text-black border-[1.5px] border-black px-[30px] py-3 cursor-pointer font-sans text-[11px] font-black tracking-[0.22em] uppercase hover:bg-black hover:text-white active:scale-95 transition-all">VIEW CATALOG</button>
+                            <Link to="/overview" className="bg-red-600 text-white border-none px-[30px] py-3 cursor-pointer font-sans text-[11px] font-black tracking-[0.22em] uppercase hover:bg-red-700 active:scale-95 transition-all no-underline inline-block">EXPLORE MODEL</Link>
+                            <Link to="/catalog" className="bg-transparent text-black border-[1.5px] border-black px-[30px] py-3 cursor-pointer font-sans text-[11px] font-black tracking-[0.22em] uppercase hover:bg-black hover:text-white active:scale-95 transition-all no-underline inline-block">VIEW CATALOG</Link>
                         </div>
                     </div>
 
