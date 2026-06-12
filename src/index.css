@@ -1,21 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Noto+Serif+SC:wght@900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-serif: "Playfair Display", serif;
-  --font-sans: "Montserrat", sans-serif;
+  --font-serif: "Noto Serif SC", serif;
+  --font-sans: "Barlow Condensed", sans-serif;
 }
 
 @layer base {
   body {
     font-family: var(--font-sans);
-    @apply bg-[#0d0d0d] text-white selection:bg-amber-500/30;
+    @apply bg-[#d6d3cc] text-black selection:bg-red-600/30;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans); /* Most headings in this design use Barlow Condensed */
+    font-weight: 900;
   }
 
-  /* Custom scrollbar for an ancient look */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -23,24 +24,15 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
   }
 }
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #0d0d0d;
-  --border: rgba(255, 255, 255, 0.05);
-  --accent: #eab308;
-
-  --sans: "Montserrat", sans-serif;
-  --heading: "Playfair Display", serif;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -49,14 +41,9 @@
 
 #root {
   width: 100%;
-  margin: 0 auto;
 }
 
 body {
   margin: 0;
   overflow-x: hidden;
-}
-
-a {
-  @apply transition-all duration-300;
 }
