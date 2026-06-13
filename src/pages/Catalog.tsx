@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation, Link } from "react-router-dom";
 import { gsap } from "gsap";
+import img1 from "@src/assets/drops/background.png";
+import img2 from "@src/assets/drops/background2.png";
+import img3 from "@src/assets/drops/background3.png";
+import img4 from "@src/assets/drops/background4.png";
+
+const IMGS = [img1, img2, img3, img4, img1, img2];
 
 export default function Catalog() {
     const location = useLocation();
@@ -43,10 +49,8 @@ export default function Catalog() {
                                     <div className="w-1.5 h-1.5 bg-black rounded-full" />
                                 </div>
 
-                                <div className="relative z-10 my-4 flex-1 flex items-center justify-center border border-dashed border-gray-200 bg-gray-50/50">
-                                     <p className="text-[8px] text-gray-400 tracking-[0.2em] uppercase text-center">
-                                        [IMG_REF: CAT_0{i}]<br />RENDER_PENDING
-                                    </p>
+                                <div className="relative z-10 my-4 flex-1 flex items-center justify-center border border-dashed border-gray-200 bg-gray-50/50 overflow-hidden">
+                                     <img src={IMGS[i-1]} alt={`Tactical Series ${i}`} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
                                 </div>
 
                                 <div className="relative z-10">

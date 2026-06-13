@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TriIcon } from "../components/Navbar";
+import heroImage from "@src/assets/drops/background.png";
 
 /* ─── hooks ─────────────────────────────────────────────────────── */
 function useTypewriter(text: string, speed: number = 55, delay: number = 1200): string {
@@ -72,11 +73,12 @@ export default function HorizonS() {
                             天&nbsp;&nbsp;双
                         </span>
                     </div>
+                    <div className="absolute inset-0 z-0 opacity-40">
+                        <img src={heroImage} alt="" className="w-full h-full object-cover grayscale" />
+                    </div>
                     <div className="absolute right-0 top-[-12%] bottom-[-12%] w-[clamp(200px,44%,480px)] z-20 flex items-center justify-end pointer-events-none">
-                        <div className="w-full h-full border border-white/10 border-dashed flex items-center justify-center bg-zinc-900/50">
-                            <p className="text-[9px] text-white/20 tracking-[0.18em] uppercase text-center leading-[2]">
-                                [IMAGE_BUFFER_01]<br />PRODUCT_HERO_RENDER<br />RESOLUTION: 2400x1600
-                            </p>
+                        <div className="w-full h-full border border-white/10 border-dashed flex items-center justify-center bg-zinc-900/80 overflow-hidden">
+                            <img src={heroImage} alt="Horizon-S Tactical Render" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>
