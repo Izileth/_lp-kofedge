@@ -10,15 +10,21 @@ import SplashScreen from "./components/SplashScreen";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [splashFinished, setSplashFinished] = useState(false);
 
   return (
     <>
-      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+      {showSplash && (
+        <SplashScreen 
+          onComplete={() => setShowSplash(false)} 
+          onFadeStart={() => setSplashFinished(true)} 
+        />
+      )}
       <Router>
         <Layout>
           <Routes>
             {/* Index Routes */}
-            <Route path="/" element={<HorizonS />} />
+            <Route path="/" element={<HorizonS isReady={splashFinished} />} />
             <Route path="/overview" element={<SubPage title="Overview" description="System-wide overview of the XVS tactical ecosystem and Horizon-S capabilities." />} />
             <Route path="/specifications" element={<SubPage title="Specifications" description="Detailed technical specifications and hardware requirements." />} />
             <Route path="/performance" element={<SubPage title="Performance Data" description="Real-time performance metrics and benchmark results from field testing." />} />

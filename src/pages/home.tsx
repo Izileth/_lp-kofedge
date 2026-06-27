@@ -1,22 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { TriIcon } from "../components/Navbar";
 import heroImage from "@src/assets/drops/background.png";
+import { gsap } from "gsap";
 
 /* ─── hooks ─────────────────────────────────────────────────────── */
-function useTypewriter(text: string, speed: number = 55, delay: number = 1200): string {
+function useTypewriter(text: string, speed: number = 55, delay: number = 1.2): string {
     const [out, setOut] = useState("");
     useEffect(() => {
-        let i = 0;
-        const t = setTimeout(() => {
-            const iv = setInterval(() => {
-                i++;
-                setOut(text.slice(0, i));
-                if (i >= text.length) clearInterval(iv);
-            }, speed);
-            return () => clearInterval(iv);
-        }, delay);
-        return () => clearTimeout(t);
+        const obj = { count: 0 };
+        const duration = (text.length * speed) / 1000;
+        const tween = gsap.to(obj, {
+            count: text.length,
+            duration: duration,
+            delay: delay,
+            ease: "none",
+            onUpdate: () => {
+                setOut(text.slice(0, Math.floor(obj.count)));
+            }
+        });
+        return () => {
+            tween.kill();
+        };
     }, [text, speed, delay]);
     return out;
 }
@@ -43,32 +48,86 @@ function Barcode() {
     );
 }
 
-export default function HorizonS() {
+export default function HorizonS({ isReady = true }: { isReady?: boolean }) {
     const serial = useTypewriter("S/N 48-1508F");
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!isReady) return;
+
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            // 1. Animate title strip contents
+            tl.from(".hero-title-el", {
+                y: -20,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.6
+            });
+
+            // 2. Animate big band elements
+            tl.from(".hero-bg-text", {
+                x: -50,
+                opacity: 0,
+                duration: 1.2
+            }, "-=0.3");
+
+            tl.from(".hero-kanji", {
+                scale: 0.7,
+                opacity: 0,
+                duration: 1,
+                ease: "back.out(1.7)"
+            }, "-=1.0");
+
+            tl.from(".hero-render-img", {
+                x: 100,
+                opacity: 0,
+                duration: 1.2
+            }, "-=1.0");
+
+            // 3. Info row elements
+            tl.from(".hero-info-item", {
+                y: 25,
+                opacity: 0,
+                stagger: 0.15,
+                duration: 0.8
+            }, "-=0.8");
+
+            // 4. Status bar elements
+            tl.from(".hero-status-item", {
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.5
+            }, "-=0.6");
+
+        }, containerRef);
+        return () => ctx.revert();
+    }, [isReady]);
 
     return (
         <section className="flex flex-col min-h-[calc(100svh-52px)] p-[6px] md:p-[10px]" aria-label="Horizon-S product hero">
-            <div className="flex-1 border-[1.5px] border-black bg-white flex flex-col overflow-hidden">
+            <div ref={containerRef} className="flex-1 border-[1.5px] border-black bg-white flex flex-col overflow-hidden">
 
                 {/* Title strip */}
                 <div className="flex items-center gap-3 px-[14px] md:px-[22px] py-[12px] md:py-[14px] border-b-[1.5px] border-black flex-shrink-0">
-                    <div className="w-8 h-8 bg-red-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                    <div className="hero-title-el w-8 h-8 bg-red-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                         <TriIcon size={14} color="#fff" />
                     </div>
-                    <h1 className="text-[clamp(22px,3.5vw,38px)] font-black tracking-wider uppercase leading-none">
+                    <h1 className="hero-title-el text-[clamp(22px,3.5vw,38px)] font-black tracking-wider uppercase leading-none">
                         HORIZON-<em className="italic font-serif">s</em>
                     </h1>
-                    <span className="hidden md:block ml-auto text-[8px] font-bold tracking-[0.28em] text-gray-400 uppercase [writing-mode:vertical-rl]" aria-label="Night Performance series">
+                    <span className="hero-title-el hidden md:block ml-auto text-[8px] font-bold tracking-[0.28em] text-gray-400 uppercase [writing-mode:vertical-rl]" aria-label="Night Performance series">
                         NIGHT PERFORMANCE
                     </span>
                 </div>
 
                 {/* Big band */}
                 <div className="relative flex-1 bg-black overflow-hidden min-h-[clamp(160px,32vw,380px)]" role="img" aria-label="Horizon-S tactical product">
-                    <div className="absolute inset-0 flex items-center pl-1 text-[clamp(100px,24vw,280px)] font-black tracking-tighter leading-none text-white whitespace-nowrap select-none pointer-events-none opacity-100" aria-hidden="true">
+                    <div className="hero-bg-text absolute inset-0 flex items-center pl-1 text-[clamp(100px,24vw,280px)] font-black tracking-tighter leading-none text-white whitespace-nowrap select-none pointer-events-none opacity-100" aria-hidden="true">
                         NEUTRAL
                     </div>
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                    <div className="hero-kanji absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                         <span className="font-serif font-black text-[clamp(56px,13vw,130px)] text-red-600 tracking-widest leading-none opacity-95" aria-label="Kanji: unrivaled">
                             天&nbsp;&nbsp;双
                         </span>
@@ -76,7 +135,7 @@ export default function HorizonS() {
                     <div className="absolute inset-0 z-0 opacity-40">
                         <img src={heroImage} alt="" className="w-full h-full object-cover grayscale" />
                     </div>
-                    <div className="absolute right-0 top-[-12%] bottom-[-12%] w-[clamp(200px,44%,480px)] z-20 flex items-center justify-end pointer-events-none">
+                    <div className="hero-render-img absolute right-0 top-[-12%] bottom-[-12%] w-[clamp(200px,44%,480px)] z-20 flex items-center justify-end pointer-events-none">
                         <div className="w-full h-full border border-white/10 border-dashed flex items-center justify-center bg-zinc-900/80 overflow-hidden">
                             <img src={heroImage} alt="Horizon-S Tactical Render" className="w-full h-full object-cover" />
                         </div>
@@ -85,7 +144,7 @@ export default function HorizonS() {
 
                 {/* Info row */}
                 <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 p-[14px] md:p-[22px] border-t-[1.5px] border-black flex-shrink-0">
-                    <div className="flex-1 min-w-[180px]">
+                    <div className="hero-info-item flex-1 min-w-[180px]">
                         <p className="text-[clamp(14px,2.2vw,22px)] font-black tracking-[0.2em] uppercase mb-1.5">MODIFICATION</p>
                         <p className="text-[10px] text-gray-500 tracking-widest uppercase leading-relaxed">
                             YOU CAN GET A SKIN BURN WHEN HANDLING<br />LEAD-ACID BATTERIES.
@@ -104,7 +163,7 @@ export default function HorizonS() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2.5 self-center md:ml-auto flex-shrink-0">
+                    <div className="hero-info-item flex items-center gap-2.5 self-center md:ml-auto flex-shrink-0">
                         <span className="text-[clamp(13px,2vw,19px)] font-black tracking-[0.18em] font-mono min-w-[148px] text-black" aria-live="polite">
                             {serial}
                             {serial.length < 12 && <span className="animate-[pulse_1s_step-end_infinite]" aria-hidden="true">_</span>}
@@ -115,12 +174,12 @@ export default function HorizonS() {
 
                 {/* Status bar */}
                 <div className="flex items-center gap-3 px-[14px] md:px-[22px] py-2.5 border-t-[1.5px] border-black bg-gray-50 flex-wrap flex-shrink-0">
-                    <div className="w-[7px] h-[7px] rounded-full bg-green-600 animate-pulse flex-shrink-0" aria-hidden="true" />
-                    <span className="text-[9px] font-bold tracking-[0.22em] uppercase text-gray-500">SYSTEM ACTIVE</span>
-                    <div className="hidden md:block w-px h-[22px] bg-gray-200 flex-shrink-0" aria-hidden="true" />
-                    <Waveform />
-                    <div className="hidden md:block w-px h-[22px] bg-gray-200 flex-shrink-0" aria-hidden="true" />
-                    <div className="flex-1 overflow-hidden min-w-[100px]"><Barcode /></div>
+                    <div className="hero-status-item w-[7px] h-[7px] rounded-full bg-green-600 animate-pulse flex-shrink-0" aria-hidden="true" />
+                    <span className="hero-status-item text-[9px] font-bold tracking-[0.22em] uppercase text-gray-500">SYSTEM ACTIVE</span>
+                    <div className="hero-status-item hidden md:block w-px h-[22px] bg-gray-200 flex-shrink-0" aria-hidden="true" />
+                    <div className="hero-status-item"><Waveform /></div>
+                    <div className="hero-status-item hidden md:block w-px h-[22px] bg-gray-200 flex-shrink-0" aria-hidden="true" />
+                    <div className="hero-status-item flex-1 overflow-hidden min-w-[100px]"><Barcode /></div>
                 </div>
 
             </div>

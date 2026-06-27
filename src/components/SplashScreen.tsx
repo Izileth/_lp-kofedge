@@ -29,7 +29,7 @@ function WaveformProgress() {
     );
 }
 
-export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
+export default function SplashScreen({ onComplete, onFadeStart }: { onComplete: () => void; onFadeStart?: () => void }) {
   const [currentMessage, setCurrentMessage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -39,6 +39,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
   useEffect(() => {
     const tl = gsap.timeline({
       onComplete: () => {
+        if (onFadeStart) onFadeStart();
         gsap.to(containerRef.current, {
           opacity: 0,
           duration: 0.8,

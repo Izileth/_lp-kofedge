@@ -78,6 +78,43 @@ const ChevronDown = ({ size = 10 }: { size?: number }) => (
 
 /* ─── components ────────────────────────────────────────────────── */
 function DesktopDropdown({ item, isOpen, onEnter, onLeave }: { item: NavItem; isOpen: boolean; onEnter: () => void; onLeave: () => void }) {
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const chevronRef = useRef<HTMLSpanElement>(null);
+
+    useEffect(() => {
+        if (isOpen) {
+            gsap.to(dropdownRef.current, {
+                opacity: 1,
+                y: 8,
+                duration: 0.2,
+                ease: "power2.out",
+                pointerEvents: "auto",
+                overwrite: "auto"
+            });
+            gsap.to(chevronRef.current, {
+                rotate: 180,
+                duration: 0.2,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        } else {
+            gsap.to(dropdownRef.current, {
+                opacity: 0,
+                y: 0,
+                duration: 0.2,
+                ease: "power2.in",
+                pointerEvents: "none",
+                overwrite: "auto"
+            });
+            gsap.to(chevronRef.current, {
+                rotate: 0,
+                duration: 0.2,
+                ease: "power2.in",
+                overwrite: "auto"
+            });
+        }
+    }, [isOpen]);
+
     return (
         <li className="relative list-none" onMouseEnter={onEnter} onMouseLeave={onLeave}>
             <Link
@@ -86,12 +123,13 @@ function DesktopDropdown({ item, isOpen, onEnter, onLeave }: { item: NavItem; is
                 aria-expanded={isOpen}
             >
                 {item.label}<sup className="text-[7px] text-gray-400 ml-0.5 align-super font-normal">{item.sup}</sup>
-                <span className={`ml-1 flex items-center transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
+                <span ref={chevronRef} className="ml-1 flex items-center">
                     <ChevronDown />
                 </span>
             </Link>
             <div
-                className={`absolute top-full left-0 min-w-[176px] bg-white border-[1.5px] border-black flex flex-col transition-all duration-200 z-[300] ${isOpen ? "opacity-100 translate-y-2 pointer-events-auto" : "opacity-0 translate-y-0 pointer-events-none"}`}
+                ref={dropdownRef}
+                className="absolute top-full left-0 min-w-[176px] bg-white border-[1.5px] border-black flex flex-col z-[300] opacity-0 pointer-events-none"
                 role="menu"
             >
                 {item.sub.map(s => (
@@ -106,6 +144,8 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     const [expanded, setExpanded] = useState<number | null>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
+    const subMenuRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const chevronRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
     useEffect(() => {
         if (open) {
@@ -123,6 +163,46 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             }
         };
     }, [open]);
+
+    useEffect(() => {
+        subMenuRefs.current.forEach((el, idx) => {
+            if (el) {
+                if (expanded === idx) {
+                    gsap.to(el, {
+                        height: "auto",
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
+                    if (chevronRefs.current[idx]) {
+                        gsap.to(chevronRefs.current[idx], {
+                            rotate: 180,
+                            duration: 0.3,
+                            ease: "power2.out",
+                            overwrite: "auto"
+                        });
+                    }
+                } else {
+                    gsap.to(el, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.inOut",
+                        overwrite: "auto"
+                    });
+                    if (chevronRefs.current[idx]) {
+                        gsap.to(chevronRefs.current[idx], {
+                            rotate: 0,
+                            duration: 0.3,
+                            ease: "power2.inOut",
+                            overwrite: "auto"
+                        });
+                    }
+                }
+            }
+        });
+    }, [expanded]);
 
     return (
         <>
@@ -162,13 +242,13 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                             >
                                 <span className="text-[8px] text-gray-400 font-bold tracking-[0.1em] w-[18px]">{item.sup}</span>
                                 <span>{item.label}</span>
-                                <span className={`ml-auto transition-transform duration-300 ${expanded === idx ? "rotate-180" : ""}`}>
+                                <span ref={el => { chevronRefs.current[idx] = el; }} className="ml-auto flex items-center">
                                     <ChevronDown size={12} />
                                 </span>
                             </button>
                             <div
-                                className="overflow-hidden bg-gray-50 transition-all duration-300 border-t border-gray-100"
-                                style={{ maxHeight: expanded === idx ? `${item.sub.length * 52}px` : 0, opacity: expanded === idx ? 1 : 0 }}
+                                ref={el => { subMenuRefs.current[idx] = el; }}
+                                className="overflow-hidden bg-gray-50 border-t border-gray-100 h-0 opacity-0"
                             >
                                 {item.sub.map(s => (
                                     <Link key={s.path} to={s.path} className="block px-12 py-3 text-[10px] font-bold tracking-[0.18em] uppercase text-gray-600 border-b border-gray-100 last:border-0 hover:text-red-600 hover:bg-white transition-colors" onClick={onClose}>{s.label}</Link>
